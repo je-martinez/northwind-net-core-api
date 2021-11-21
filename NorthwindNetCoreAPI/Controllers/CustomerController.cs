@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NorthwindDAL;
 using NorthwindDatabase.Context;
 
 namespace NorthwindNetCoreAPI.Controllers
@@ -14,6 +15,8 @@ namespace NorthwindNetCoreAPI.Controllers
     public class CustomerController : ControllerBase
     {
         protected NorthwindDBContext _context;
+        private UnitOfWork unitOfWork = new UnitOfWork();
+
         public CustomerController(NorthwindDBContext context)
         {
             _context = context;
@@ -23,7 +26,7 @@ namespace NorthwindNetCoreAPI.Controllers
         [Route("test")]
         public async Task<IActionResult> TestingUp()
         {
-            var a = await _context.Customers.ToListAsync();
+            var a = unitOfWork.CustomersRepository.Get().ToList();
             return Ok("Great!");
         }
     }
