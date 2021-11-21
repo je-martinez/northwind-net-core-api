@@ -24,6 +24,15 @@ namespace NorthwindDAL
                 return this._customersRepository;
             }
         }
+
+        public NorthwindDBContext CurrentContext
+        {
+            get
+            {
+                return this._context;
+            } 
+        }
+
         public void Save()
         {
             _context.SaveChanges();

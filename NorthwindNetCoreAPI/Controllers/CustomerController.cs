@@ -15,7 +15,6 @@ namespace NorthwindNetCoreAPI.Controllers
     public class CustomerController : ControllerBase
     {
         protected NorthwindDBContext _context;
-        private UnitOfWork unitOfWork = new UnitOfWork();
 
         public CustomerController(NorthwindDBContext context)
         {
@@ -26,8 +25,18 @@ namespace NorthwindNetCoreAPI.Controllers
         [Route("test")]
         public async Task<IActionResult> TestingUp()
         {
-            var a = unitOfWork.CustomersRepository.Get().ToList();
-            return Ok("Great!");
+            using(UnitOfWork unitOfWork = new UnitOfWork())
+            {
+                try
+                {
+                    var response = unitOfWork.CustomersRepository.Get().ToList();
+                    return Ok(response);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Epic Error!");
+                }
+            }
         }
     }
 }
